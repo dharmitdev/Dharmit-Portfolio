@@ -47,36 +47,10 @@ export default function Home() {
   const [showHireModal, setShowHireModal] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
-  const [currentTime, setCurrentTime] = useState(() => {
-    const options: Intl.DateTimeFormatOptions = {
-      timeZone: 'Asia/Kolkata',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: true,
-    };
-    return new Date().toLocaleTimeString('en-US', options);
-  });
   const roles = ['interfaces', 'web apps', 'UI/UX designs', 'experiences'];
   const [displayText, setDisplayText] = useState('');
   const [roleIndex, setRoleIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
-
-  useEffect(() => {
-    const updateTime = () => {
-      const options: Intl.DateTimeFormatOptions = {
-        timeZone: 'Asia/Kolkata',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: true,
-      };
-      setCurrentTime(new Date().toLocaleTimeString('en-US', options));
-    };
-
-    const timer = setInterval(updateTime, 1000);
-    return () => clearInterval(timer);
-  }, []);
 
   useEffect(() => {
     const currentWord = roles[roleIndex];
@@ -245,10 +219,6 @@ export default function Home() {
         <div className="hero-grid-overlay"></div>
         <div className="hero-status-container">
           <div className="availability-badge"><span></span> Available for opportunities</div>
-          <span className="hero-time-widget">
-            <span className="time-pulse"></span>
-            {currentTime} IST
-          </span>
         </div>
         <p className="hero-eyebrow">
           <span className="hero-role-label">
@@ -459,30 +429,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="project-card full reveal reveal-delay-1">
-            <div className="project-thumb">
-              <svg className="project-thumb-pattern" viewBox="0 0 1000 300" preserveAspectRatio="xMidYMid slice">
-                <defs><pattern id="dots2" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="12" cy="12" r="1.5" fill="#b8ff57"/></pattern></defs>
-                <rect width="100%" height="100%" fill="url(#dots2)" opacity="0.6"/>
-                <rect x="300" y="80" width="400" height="140" rx="8" fill="rgba(184,255,87,0.06)" stroke="#b8ff57" strokeWidth="0.5"/>
-              </svg>
-              <div className="project-thumb-inner">05</div>
-            </div>
-            <div className="project-num">05</div>
-            <div className="project-content">
-              <div className="project-tags">
-                <span className="project-tag">React</span>
-                <span className="project-tag">TypeScript</span>
-                <span className="project-tag">Tailwind CSS</span>
-              </div>
-              <h3 className="project-name">Portfolio v1</h3>
-              <p className="project-desc">My personal portfolio — designed and developed using React, TypeScript, and Tailwind CSS. Features custom cursor tracking, smooth scroll animations, and a fully responsive bento grid layout.</p>
-              <div className="project-links">
-                <a href="#" className="project-link primary">Live Demo →</a>
-                <a href="https://github.com" className="project-link">GitHub ↗</a>
-              </div>
-            </div>
-          </div>
+
 
         </div>
       </div>
