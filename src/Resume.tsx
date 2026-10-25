@@ -100,7 +100,7 @@ export default function Resume() {
               DHARMIT PATEL
             </h1>
             <p className="text-lg md:text-xl font-mono text-[var(--acid)] print-text-dim font-medium tracking-wide">
-              Junior Frontend Web Developer & UI/UX Designer
+              Frontend Web Developer & UI/UX Designer
             </p>
           </div>
           <div className="mt-4 md:mt-0 text-left md:text-right font-mono text-sm text-[var(--cream-dim)] print-text-dim space-y-1">
@@ -125,7 +125,7 @@ export default function Resume() {
             Professional Summary
           </h2>
           <p className="text-sm md:text-base leading-relaxed text-[var(--cream-dim)] print-text-black">
-            Detail-oriented Junior Frontend Web Developer and UI/UX Designer with hands-on experience in building responsive, user-centric web applications. Proficient in HTML5, CSS3, JavaScript, and modern styling frameworks like Tailwind CSS. Adept at translating Figma designs into functional code and optimizing web performance for seamless digital experiences.
+            Detail-oriented Frontend Web Developer and UI/UX Designer with hands-on experience in building responsive, user-centric web applications. Proficient in HTML5, CSS3, JavaScript, and modern styling frameworks like Tailwind CSS. Adept at translating Figma designs into functional code and optimizing web performance for seamless digital experiences.
           </p>
         </section>
 
@@ -202,16 +202,16 @@ export default function Resume() {
               A smart engineering reference and pressure piping specification database. Built offline-capable matching engine for ASME/ANSI B36.10 dimension calculations and integrated Gemini AI intelligence.
             </p>
             <div className="text-xs font-mono text-[var(--acid)] print-text-dim space-x-3">
-              <a href="https://dharmithmt.vercel.app/" target="_blank" rel="noreferrer" className="hover:underline">Live Demo</a>
+              <a href="https://dharmitpnt.vercel.app/" target="_blank" rel="noreferrer" className="hover:underline">Live Demo</a>
               <span>•</span>
-              <a href="https://github.com/dharmitdev/Dharmit" target="_blank" rel="noreferrer" className="hover:underline">GitHub</a>
+              <a href="https://github.com/dharmitdev/Dharmit-hmt" target="_blank" rel="noreferrer" className="hover:underline">GitHub</a>
             </div>
           </div>
 
           <div className="mb-6">
             <div className="flex justify-between items-baseline mb-1">
               <h3 className="text-base md:text-lg font-semibold text-[var(--cream)] print-text-black">
-                Foodie – Online Food Ordering Platform
+                PureBite – Online Food Ordering Platform
               </h3>
               <span className="font-mono text-xs text-[var(--cream-dim)] print-text-dim">React, Tailwind CSS, JavaScript</span>
             </div>
@@ -221,7 +221,7 @@ export default function Resume() {
               <li>Solved complex layout challenges using CSS Grid and Flexbox to ensure a consistent experience across browsers.</li>
             </ul>
             <div className="text-xs font-mono text-[var(--acid)] print-text-dim space-x-3">
-              <a href="https://dharmit-portfolio.netlify.app/project/public/" target="_blank" rel="noreferrer" className="hover:underline">Live Demo</a>
+              <a href="https://purebite-food.vercel.app/" target="_blank" rel="noreferrer" className="hover:underline">Live Demo</a>
             </div>
           </div>
         </section>

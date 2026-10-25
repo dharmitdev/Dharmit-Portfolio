@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { Cpu, Palette, Wrench, GraduationCap, Code2, Layers, Terminal, Sparkles, Box, FileCode2, Braces, GitBranch, Github, Laptop, Zap, Atom, ChevronDown } from 'lucide-react';
 
 // Custom easing function (easeInOutQuart)
 function easeInOutQuart(t: number, b: number, c: number, d: number) {
@@ -269,17 +270,26 @@ export default function Home() {
             </span>
           </span>
         </h1>
-        <p className="hero-sub">Junior Frontend Web Developer &amp; UI/UX Designer crafting fast, responsive, and visually precise web experiences. Specializing in React, TypeScript, and translating Figma designs into high-performance, pixel-perfect code.</p>
+        <p className="hero-sub">Frontend Web Developer &amp; UI/UX Designer crafting fast, responsive, and visually precise web experiences. Specializing in React, TypeScript, and translating Figma designs into high-performance, pixel-perfect code.</p>
         <div className="hero-actions">
           <a href="#projects" className="btn-primary" onClick={(e) => { e.preventDefault(); smoothScrollTo('#projects', 1000); }}>
             View My Work <span className="btn-arrow">↓</span>
           </a>
         </div>
-        <div className="hero-scroll">Scroll to explore</div>
+        <button 
+          className={`hero-scroll-indicator ${isScrolled ? 'hidden' : ''}`}
+          onClick={() => smoothScrollTo('#about', 800)}
+          aria-label="Scroll to about section"
+        >
+          <div className="mouse-icon">
+            <span className="mouse-wheel"></span>
+          </div>
+          <span className="hero-scroll-text">Scroll down</span>
+          <ChevronDown size={12} className="scroll-arrow" />
+        </button>
         <div className="hero-stats">
-          <div className="stat"><div className="stat-num">5+</div><div className="stat-label">Projects Shipped</div></div>
+          <div className="stat"><div className="stat-num">12+</div><div className="stat-label">Projects Shipped</div></div>
           <div className="stat"><div className="stat-num">2+</div><div className="stat-label">Years Building</div></div>
-          <div className="stat"><div className="stat-num">100</div><div className="stat-label">Lighthouse Score</div></div>
         </div>
       </section>
 
@@ -298,37 +308,37 @@ export default function Home() {
           </div>
           <div className="skills-grid reveal reveal-delay-2">
             <div className="skill-group">
-              <div className="skill-group-name">Core</div>
+              <div className="skill-group-name"><Code2 size={13} className="text-[var(--acid)]" /> Core</div>
               <div className="skill-tags">
-                <span className="skill-tag">React</span>
-                <span className="skill-tag">JavaScript</span>
-                <span className="skill-tag">HTML5</span>
-                <span className="skill-tag">CSS3</span>
+                <span className="skill-tag"><Atom size={11} className="opacity-70" /> React</span>
+                <span className="skill-tag"><Braces size={11} className="opacity-70" /> JavaScript</span>
+                <span className="skill-tag"><FileCode2 size={11} className="opacity-70" /> HTML5</span>
+                <span className="skill-tag"><Layers size={11} className="opacity-70" /> CSS3</span>
               </div>
             </div>
             <div className="skill-group">
-              <div className="skill-group-name">Styling</div>
+              <div className="skill-group-name"><Palette size={13} className="text-[var(--acid)]" /> Styling</div>
               <div className="skill-tags">
-                <span className="skill-tag">Tailwind CSS</span>
-                <span className="skill-tag">Framer Motion</span>
-                <span className="skill-tag">SCSS</span>
+                <span className="skill-tag"><Zap size={11} className="opacity-70" /> Tailwind CSS</span>
+                <span className="skill-tag"><Sparkles size={11} className="opacity-70" /> Framer Motion</span>
+                <span className="skill-tag"><Layers size={11} className="opacity-70" /> SCSS</span>
               </div>
             </div>
             <div className="skill-group">
-              <div className="skill-group-name">Tooling</div>
+              <div className="skill-group-name"><Wrench size={13} className="text-[var(--acid)]" /> Tooling</div>
               <div className="skill-tags">
-                <span className="skill-tag">Git</span>
-                <span className="skill-tag">GitHub</span>
-                <span className="skill-tag">VS Code</span>
-                <span className="skill-tag">Vite</span>
+                <span className="skill-tag"><GitBranch size={11} className="opacity-70" /> Git</span>
+                <span className="skill-tag"><Github size={11} className="opacity-70" /> GitHub</span>
+                <span className="skill-tag"><Laptop size={11} className="opacity-70" /> VS Code</span>
+                <span className="skill-tag"><Zap size={11} className="opacity-70" /> Vite</span>
               </div>
             </div>
             <div className="skill-group">
-              <div className="skill-group-name">Currently learning</div>
+              <div className="skill-group-name"><GraduationCap size={13} className="text-[var(--acid)]" /> Currently learning</div>
               <div className="skill-tags">
-                <span className="skill-tag">Next.js</span>
-                <span className="skill-tag">TypeScript</span>
-                <span className="skill-tag">Node.js</span>
+                <span className="skill-tag"><Box size={11} className="opacity-70" /> Next.js</span>
+                <span className="skill-tag"><FileCode2 size={11} className="opacity-70" /> TypeScript</span>
+                <span className="skill-tag"><Cpu size={11} className="opacity-70" /> Node.js</span>
               </div>
             </div>
           </div>
@@ -359,10 +369,10 @@ export default function Home() {
                 <span className="project-tag">Tailwind CSS</span>
                 <span className="project-tag">JavaScript</span>
               </div>
-              <h3 className="project-name">Food Order Web App</h3>
+              <h3 className="project-name">PureBite – Food Order App</h3>
               <p className="project-desc">A responsive online food ordering platform with real-time cart management, menu filtering, and a streamlined checkout flow. Built mobile-first with React state management and Tailwind utility classes.</p>
               <div className="project-links">
-                <a href="https://dharmit-portfolio.netlify.app/project/public/" target="_blank" rel="noreferrer" className="project-link primary">Live Demo →</a>
+                <a href="https://purebite-food.vercel.app/" target="_blank" rel="noreferrer" className="project-link primary">Live Demo →</a>
                 <a href="https://github.com" className="project-link">GitHub ↗</a>
               </div>
             </div>
@@ -394,8 +404,8 @@ export default function Home() {
               <h3 className="project-name">Pipe & Tube Finder</h3>
               <p className="project-desc">A smart engineering reference and pressure piping specification database. Allows users to quickly search, filter, and calculate ASME/ANSI B36.10 dimensions, alloy suffixes, and Indian Boiler Regulations (IBR) rules with full offline capability and Gemini-powered smart intelligence.</p>
               <div className="project-links">
-                <a href="https://dharmithmt.vercel.app/" target="_blank" rel="noreferrer" className="project-link primary">Live Demo →</a>
-                <a href="https://github.com/dharmitdev/Dharmit" target="_blank" rel="noreferrer" className="project-link">GitHub ↗</a>
+                <a href="https://dharmitpnt.vercel.app/" target="_blank" rel="noreferrer" className="project-link primary">Live Demo →</a>
+                <a href="https://github.com/dharmitdev/Dharmit-hmt" target="_blank" rel="noreferrer" className="project-link">GitHub ↗</a>
               </div>
             </div>
           </div>
