@@ -155,6 +155,10 @@ export default function Home() {
         }
         throw new Error(data?.error || `Failed to send message (HTTP ${res.status})`);
       }
+
+      if (data?.simulated) {
+        throw new Error('Email service is not yet configured in this deployment (RESEND_API_KEY is missing in Vercel settings). Please contact dharmitpatel8960@gmail.com directly.');
+      }
       
       setFormStatus({ loading: false, success: true, error: '' });
       setSentAttachmentName(attachment ? attachment.name : '');
@@ -162,7 +166,7 @@ export default function Home() {
       setAttachment(null);
       
       // Trigger Toast
-      setToast({ visible: true, message: "Thanks! I'll get back to you within 24 hours." });
+      setToast({ visible: true, message: data?.message || "Thanks! I'll get back to you within 24 hours." });
       setTimeout(() => {
         setToast({ visible: false, message: '' });
         setFormStatus({ loading: false, success: false, error: '' });

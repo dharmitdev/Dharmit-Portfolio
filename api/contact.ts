@@ -27,16 +27,37 @@ export default async function handler(req: any, res: any) {
     }
 
     const apiKey = process.env.RESEND_API_KEY;
+    const web3formsKey = process.env.WEB3FORMS_ACCESS_KEY;
 
-    if (!apiKey) {
-      // In development or when RESEND_API_KEY is not configured yet in Vercel environment variables,
-      // simulate success so the form does not fail for the user.
-      console.warn("RESEND_API_KEY is not configured in Vercel environment. Simulating email receipt.");
-      return res.status(200).json({
-        success: true,
-        simulated: true,
-        message: "Message received! (Add RESEND_API_KEY in Vercel settings to receive live emails)",
+    if (!apiKey && !web3formsKey) {
+      console.error("Neither RESEND_API_KEY nor WEB3FORMS_ACCESS_KEY is configured in Vercel environment.");
+      return res.status(500).json({
+        error: "Email service is not configured on this host. Please add RESEND_API_KEY in your Vercel Project Settings (Settings → Environment Variables) to receive real emails.",
       });
+    }
+
+    if (!apiKey && web3formsKey) {
+      const formPayload = new FormData();
+      formPayload.append("access_key", web3formsKey);
+      formPayload.append("name", name);
+      formPayload.append("email", email);
+      formPayload.append("subject", `New Portfolio Message from ${name}`);
+      formPayload.append("message", message);
+      if (attachment?.name) {
+        formPayload.append("attachment_note", `Attachment: ${attachment.name}`);
+      }
+
+      const wfRes = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formPayload,
+      });
+      const wfData = await wfRes.json();
+
+      if (!wfData.success) {
+        throw new Error(wfData.message || "Failed to deliver email via Web3Forms");
+      }
+
+      return res.status(200).json({ success: true, message: "Thank you! Your message has been sent." });
     }
 
     const resend = new Resend(apiKey);

@@ -19,18 +19,35 @@ async function startServer() {
         return res.status(400).json({ error: "Missing required fields" });
       }
 
-      // We initialize Resend here to avoid crashing if the user hasn't set the API key yet.
-      // They can set it in their AI Studio secrets as RESEND_API_KEY
-      if (!process.env.RESEND_API_KEY) {
-        // Fallback for development/demo if key is not configured
-        console.warn("RESEND_API_KEY is not defined. Simulating email send.", { name, email, message, attachmentName: attachment?.name });
-        // Simulating a network delay
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-        return res.status(200).json({ 
-          success: true, 
-          simulated: true, 
-          message: "Message logged successfully! Configure RESEND_API_KEY to send real emails." 
+      const apiKey = process.env.RESEND_API_KEY;
+      const web3formsKey = process.env.WEB3FORMS_ACCESS_KEY;
+
+      if (!apiKey && !web3formsKey) {
+        console.error("Neither RESEND_API_KEY nor WEB3FORMS_ACCESS_KEY is set in environment.");
+        return res.status(500).json({ 
+          error: "Email API key (RESEND_API_KEY or WEB3FORMS_ACCESS_KEY) is not set in environment. Please add it to your environment secrets or Vercel settings." 
         });
+      }
+
+      if (!apiKey && web3formsKey) {
+        const formPayload = new FormData();
+        formPayload.append("access_key", web3formsKey);
+        formPayload.append("name", name);
+        formPayload.append("email", email);
+        formPayload.append("subject", `New Portfolio Message from ${name}`);
+        formPayload.append("message", message);
+
+        const wfRes = await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          body: formPayload,
+        });
+        const wfData = await wfRes.json();
+
+        if (!wfData.success) {
+          throw new Error(wfData.message || "Failed to deliver email via Web3Forms");
+        }
+
+        return res.status(200).json({ success: true, message: "Thank you! Your message has been sent." });
       }
 
       const resend = new Resend(process.env.RESEND_API_KEY);
