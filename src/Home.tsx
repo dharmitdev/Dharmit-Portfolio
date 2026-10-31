@@ -137,9 +137,24 @@ export default function Home() {
           } : null
         }),
       });
-      const data = await res.json();
-      
-      if (!res.ok) throw new Error(data.error || 'Failed to send message');
+
+      const contentType = res.headers.get('content-type') || '';
+      let data: any = null;
+
+      if (contentType.includes('application/json')) {
+        try {
+          data = await res.json();
+        } catch {
+          data = null;
+        }
+      }
+
+      if (!res.ok) {
+        if (res.status === 404) {
+          throw new Error('Contact API is unavailable on this host. Please reach out directly to dharmitpatel8960@gmail.com');
+        }
+        throw new Error(data?.error || `Failed to send message (HTTP ${res.status})`);
+      }
       
       setFormStatus({ loading: false, success: true, error: '' });
       setSentAttachmentName(attachment ? attachment.name : '');
@@ -157,7 +172,7 @@ export default function Home() {
       const fileInput = document.getElementById('file-attachment') as HTMLInputElement;
       if (fileInput) fileInput.value = '';
     } catch (err: any) {
-      setFormStatus({ loading: false, success: false, error: err.message });
+      setFormStatus({ loading: false, success: false, error: err.message || 'An unexpected error occurred while sending your message.' });
     }
   };
 
@@ -569,7 +584,17 @@ export default function Home() {
                 'Send Message →'
               )}
             </button>
-            {formStatus.error && <p style={{ color: '#ff6b6b', marginTop: '1rem', fontSize: '0.9rem' }}>{formStatus.error}</p>}
+            {formStatus.error && (
+              <div style={{ marginTop: '1rem', padding: '0.85rem 1rem', borderRadius: '6px', background: 'rgba(255, 107, 107, 0.08)', border: '1px solid rgba(255, 107, 107, 0.25)' }}>
+                <p style={{ color: '#ff6b6b', fontSize: '0.85rem', marginBottom: '0.5rem' }}>{formStatus.error}</p>
+                <a
+                  href={`mailto:dharmitpatel8960@gmail.com?subject=Portfolio Inquiry from ${encodeURIComponent(formData.name || 'Visitor')}&body=${encodeURIComponent(formData.message + (formData.email ? `\n\nFrom: ${formData.email}` : ''))}`}
+                  style={{ color: 'var(--acid)', fontSize: '0.8rem', fontFamily: 'var(--font-mono)', textDecoration: 'underline', display: 'inline-block' }}
+                >
+                  ✉ Click here to send directly via your email app →
+                </a>
+              </div>
+            )}
           </form>
         </div>
       </section>
