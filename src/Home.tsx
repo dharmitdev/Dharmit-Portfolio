@@ -125,58 +125,48 @@ export default function Home() {
     setFormStatus({ loading: true, success: false, error: '' });
     
     try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          attachment: attachment ? {
-            name: attachment.name,
-            type: attachment.type,
-            base64: attachment.base64
-          } : null
-        }),
+      const payload = new FormData();
+      payload.append("access_key", "6e8f3b94-4780-490e-bdae-0d08d6d9321b");
+      payload.append("name", formData.name.trim());
+      payload.append("email", formData.email.trim());
+      payload.append("subject", `New Portfolio Message from ${formData.name.trim()}`);
+      payload.append("message", formData.message.trim());
+      payload.append("from_name", "Portfolio Contact Form");
+
+      const fileInput = document.getElementById('file-attachment') as HTMLInputElement;
+      if (fileInput?.files?.[0]) {
+        payload.append("attachment", fileInput.files[0]);
+      }
+
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: payload,
       });
 
-      const contentType = res.headers.get('content-type') || '';
-      let data: any = null;
+      const data = await res.json();
 
-      if (contentType.includes('application/json')) {
-        try {
-          data = await res.json();
-        } catch {
-          data = null;
-        }
-      }
-
-      if (!res.ok) {
-        if (res.status === 404) {
-          throw new Error('Contact API is unavailable on this host. Please reach out directly to dharmitpatel8960@gmail.com');
-        }
-        throw new Error(data?.error || `Failed to send message (HTTP ${res.status})`);
-      }
-
-      if (data?.simulated) {
-        throw new Error('Email service is not yet configured in this deployment (RESEND_API_KEY is missing in Vercel settings). Please contact dharmitpatel8960@gmail.com directly.');
+      if (!data.success) {
+        throw new Error(data.message || 'Failed to send message via email service.');
       }
       
       setFormStatus({ loading: false, success: true, error: '' });
       setSentAttachmentName(attachment ? attachment.name : '');
       setFormData({ name: '', email: '', message: '' });
       setAttachment(null);
+      if (fileInput) fileInput.value = '';
       
       // Trigger Toast
-      setToast({ visible: true, message: data?.message || "Thanks! I'll get back to you within 24 hours." });
+      setToast({ visible: true, message: "Thanks! Your message has been sent directly to my inbox." });
       setTimeout(() => {
         setToast({ visible: false, message: '' });
         setFormStatus({ loading: false, success: false, error: '' });
       }, 4000);
-      
-      // Clear file input
-      const fileInput = document.getElementById('file-attachment') as HTMLInputElement;
-      if (fileInput) fileInput.value = '';
     } catch (err: any) {
-      setFormStatus({ loading: false, success: false, error: err.message || 'An unexpected error occurred while sending your message.' });
+      setFormStatus({ 
+        loading: false, 
+        success: false, 
+        error: err.message || 'An unexpected error occurred while sending your message.' 
+      });
     }
   };
 
@@ -589,14 +579,50 @@ export default function Home() {
               )}
             </button>
             {formStatus.error && (
-              <div style={{ marginTop: '1rem', padding: '0.85rem 1rem', borderRadius: '6px', background: 'rgba(255, 107, 107, 0.08)', border: '1px solid rgba(255, 107, 107, 0.25)' }}>
-                <p style={{ color: '#ff6b6b', fontSize: '0.85rem', marginBottom: '0.5rem' }}>{formStatus.error}</p>
-                <a
-                  href={`mailto:dharmitpatel8960@gmail.com?subject=Portfolio Inquiry from ${encodeURIComponent(formData.name || 'Visitor')}&body=${encodeURIComponent(formData.message + (formData.email ? `\n\nFrom: ${formData.email}` : ''))}`}
-                  style={{ color: 'var(--acid)', fontSize: '0.8rem', fontFamily: 'var(--font-mono)', textDecoration: 'underline', display: 'inline-block' }}
-                >
-                  ✉ Click here to send directly via your email app →
-                </a>
+              <div style={{ marginTop: '1.25rem', padding: '1rem', borderRadius: '8px', background: 'rgba(255, 107, 107, 0.08)', border: '1px solid rgba(255, 107, 107, 0.25)' }}>
+                <p style={{ color: '#ff6b6b', fontSize: '0.85rem', marginBottom: '0.75rem', lineHeight: 1.5 }}>
+                  {formStatus.error}
+                </p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                  <a
+                    href={`https://mail.google.com/mail/?view=cm&fs=1&to=dharmitpatel8960@gmail.com&su=${encodeURIComponent(`Portfolio Inquiry from ${formData.name || 'Visitor'}`)}&body=${encodeURIComponent(`${formData.message}\n\n---\nFrom: ${formData.name || 'Visitor'}\nEmail: ${formData.email || 'Not provided'}`)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.4rem',
+                      padding: '0.45rem 0.85rem',
+                      background: 'var(--acid)',
+                      color: 'var(--bg)',
+                      fontWeight: 600,
+                      fontSize: '0.75rem',
+                      fontFamily: 'var(--font-mono)',
+                      borderRadius: '4px',
+                      textDecoration: 'none'
+                    }}
+                  >
+                    ✉ Open in Gmail
+                  </a>
+                  <a
+                    href={`mailto:dharmitpatel8960@gmail.com?subject=${encodeURIComponent(`Portfolio Inquiry from ${formData.name || 'Visitor'}`)}&body=${encodeURIComponent(`${formData.message}\n\n---\nFrom: ${formData.name || 'Visitor'}\nEmail: ${formData.email || 'Not provided'}`)}`}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.4rem',
+                      padding: '0.45rem 0.85rem',
+                      background: 'rgba(240, 234, 214, 0.08)',
+                      border: '1px solid rgba(240, 234, 214, 0.2)',
+                      color: 'var(--cream)',
+                      fontSize: '0.75rem',
+                      fontFamily: 'var(--font-mono)',
+                      borderRadius: '4px',
+                      textDecoration: 'none'
+                    }}
+                  >
+                    Default Mail App
+                  </a>
+                </div>
               </div>
             )}
           </form>

@@ -27,7 +27,7 @@ export default async function handler(req: any, res: any) {
     }
 
     const apiKey = process.env.RESEND_API_KEY;
-    const web3formsKey = process.env.WEB3FORMS_ACCESS_KEY;
+    const web3formsKey = process.env.WEB3FORMS_ACCESS_KEY || "6e8f3b94-4780-490e-bdae-0d08d6d9321b";
 
     if (!apiKey && !web3formsKey) {
       console.error("Neither RESEND_API_KEY nor WEB3FORMS_ACCESS_KEY is configured in Vercel environment.");
